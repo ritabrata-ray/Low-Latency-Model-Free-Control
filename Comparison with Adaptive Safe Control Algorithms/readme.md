@@ -1,4 +1,6 @@
-# Comparison with adaptive safe control techniques.
+# These are older Jupyter Notebooks see the other comparison folder
+
+Comparison with adaptive safe control techniques.
 Here, we compare our safe control technique with other state of the art safe control algorithms namely: 
 
 Adaptive CBF, 
