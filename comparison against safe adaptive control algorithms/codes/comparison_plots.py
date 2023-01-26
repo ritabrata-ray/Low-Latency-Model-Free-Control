@@ -39,10 +39,10 @@ CBC_t=forward_convergence_time(CBC,N,t)
 BALSA_t=forward_convergence_time(BALSA,N,t)
 Sign_Flip_t=forward_convergence_time(Sign_Flip,N,t)
 
-algorithms=['aCBF', 'RaCBF', 'RaCBF+SMID', 'CBC', 'BALSA', 'Sign_Flip']
+algorithms=['aCBF', 'RaCBF', 'RaCBF+SMID', 'CBC', 'BALSA', 'Our Algorithm']
 forward_convergence_times=[aCBF_t, RaCBF_t, RaCBF_SMID_t, CBC_t, BALSA_t, Sign_Flip_t]
 
-plt.bar(algorithms, forward_convergence_times, color='maroon',width=0.4)
+plt.bar(algorithms, forward_convergence_times, color=['g','y','c','k','m','b'],width=0.4)
 
 plt.xlabel("Adaptive Safe Control Algorithm")
 plt.ylabel("Time after which the system becomes safe")
@@ -51,7 +51,7 @@ plt.savefig(os.path.join(plot_path,"Bar_Forward_Convergence_Plot.png"),format="p
 plt.show()
 
 
-plt.plot(t,Sign_Flip,color='b',label='sign flip')
+plt.plot(t,Sign_Flip,color='b',label='Our Algorithm')
 plt.plot(t,aCBF,color='g',label='aCBF')
 plt.plot(t,RaCBF,color='y',label='RaCBF')
 plt.plot(t,RaCBF_SMID,color='c',label='RaCBFS')
