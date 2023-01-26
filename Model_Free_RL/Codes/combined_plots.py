@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import pandas as pd
 
 base_path="/Users/ritabrataray/Desktop/Safe control/Model_Free_RL"
 my_path=os.path.join(base_path,"Plots")
@@ -100,16 +101,42 @@ for i in range(rollouts.shape[0]):
     sr_our_algorithm+=our_algorithm_safety_rate_M[i]
 sr_our_algorithm=(sr_our_algorithm/rollouts.shape[0])
 
-algorithms=['REINFORCE', 'Benchmark 1', 'Benchmark 2', 'Our Algorithm']
-mean_safety_rates={'Benchmark 1': sr_b_1, 'Benchmark 2': sr_b_2, 'Our Algorithm': sr_our_algorithm}
+algorithms=['REINFORCE', 'Penalized REINFORCE', 'CPO', 'Our Algorithm']
+mean_safety_rates={'REINFORCE':sr_unsafe, 'Penalized REINFORCE': sr_b_1, 'CPO': sr_b_2, 'Our Algorithm': sr_our_algorithm}
 algorithms=list(mean_safety_rates.keys())
 safety_rates=list(mean_safety_rates.values())
-
-plt.bar(algorithms, safety_rates, color='maroon',
+XX=pd.Series(safety_rates,index=algorithms) #new code for broken y-axis bar graph
+fig, (ax1,ax2) = plt.subplots(2,1,sharex=True)
+ax1.spines['bottom'].set_visible(False)
+ax1.tick_params(axis='x',which='both',bottom=False)
+ax2.spines['top'].set_visible(False)
+ax2.set_ylim(0,0.025)
+ax1.set_ylim(0.8,1.0)
+ax1.set_yticks(np.arange(0.8,1.01,0.02))
+XX.plot(ax=ax1,kind='bar',color=['black','green','blue','red'])
+XX.plot(ax=ax2,kind='bar',color=['black','green','blue','red'])
+for tick in ax2.get_xticklabels():
+    tick.set_rotation(0)
+d = .015
+kwargs = dict(transform=ax1.transAxes, color='k', clip_on=False)
+ax1.plot((-d, +d), (-d, +d), **kwargs)
+ax1.plot((1 - d, 1 + d), (-d, +d), **kwargs)
+kwargs.update(transform=ax2.transAxes)
+ax2.plot((-d, +d), (1 - d, 1 + d), **kwargs)
+ax2.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)
+plt.xlabel("Model-Free RL Algorithm")
+plt.ylabel("Fractional unsafe duration")
+plt.title("Safety Rates of Different Algorithms")
+plt.savefig(os.path.join(my_path,"Bar_Safety_Rate_Plot.png"),format="png", bbox_inches="tight")
+plt.show()
+#new code ends here
+""" #Old code below
+plt.bar(algorithms, safety_rates, color=['black','green','blue','red'],
         width=0.4)
 
 plt.xlabel("Model-Free RL Algorithm")
 plt.ylabel("Fraction of the duration the system was unsafe")
 plt.title("Safety Rates of Different Algorithms")
-plt.savefig(os.path.join(my_path,"Bar_Safety_Rate_Plot.png"),format="png", bbox_inches="tight")
+plt.savefig(os.path.join(my_path,"Bar_Safety_Rate_Plot_2.png"),format="png", bbox_inches="tight")
 plt.show()
+"""
